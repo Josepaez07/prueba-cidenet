@@ -1,0 +1,44 @@
+/* Estilos Globales */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar, .footer {
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.navbar-brand:hover { color: #007bff; }
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    min-height: calc(100vh - 140px);
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 { font-size: 36px; color: #333; margin-bottom: 20px; }
+
+.footer { padding: 20px 0; position: fixed; bottom: 0; width: 100%; }
+
+.footer p { margin: 0; color: #555; }

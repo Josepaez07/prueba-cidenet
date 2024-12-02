@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIDENET</title>
+    <link rel="stylesheet" href="/frontend/statics/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand mx-auto">PRUEBA CIDENET</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="container">
+
+            <button class="btn btn-primary mb-3 mt-3" data-bs-toggle="modal" data-bs-target="#registroModal">Crear
+                Usuario</button>
+            <table id="table" class="display table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Primer Apellido</th>
+                        <th>Primer Nombre</th>
+                        <th>País del empleo</th>
+                        <th>Correo electrónico</th>
+                        <th>Fecha de ingreso</th>
+                        <th>Área</th>
+                        <th>Número de Identificación</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(users=> { %>
+                        <tr>
+                            <td>
+                                <%= users.primerApellido %>
+                            </td>
+                            <td>
+                                <%= users.primerNombre %>
+                            </td>
+                            <td>
+                                <%= users.paisEmpleo %>
+                            </td>
+                            <td>
+                                <%= users.correoElectronico %>
+                            </td>
+                            <td>
+                                <%= users.fechaIngreso.toLocaleDateString() %>
+                            </td>
+                            <td>
+                                <%= users.area %>
+                            </td>
+                            <td>
+                                <%= users.numeroIdentificacion %>
+                            </td>
+                            <td>
+                                <%= users.estado %>
+                            </td>
+                            <td class="" style="display: flex; gap: 10px;">
+                                <a class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#userInfoModal-<%= users._id %>">Info</a>
+                                <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editarModal-<%= users._id %>">Editar</a>
+                                <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarUsuarioModal-<%= users._id %>">Eliminar</a>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 2024</p>
+        </div>
+    </footer>
+
+    <!--Ventanas modales-->
+
+
+    <!--Registrar usuario-->
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registroModalLabel">Registro de Empleado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/users" method="post" autocomplete="off">
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="primerApellido" class="form-label">Primer Apellido</label>
+                                <input type="text" id="primerApellido" name="primerApellido" class="form-control"
+                                    required oninput="this.value = this.value.toUpperCase()">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="segundoApellido" class="form-label">Segundo Apellido</label>
+                                <input type="text" id="segundoApellido" name="segundoApellido" class="form-control"
+                                    oninput="this.value = this.value.toUpperCase()">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="primerNombre" class="form-label">Primer Nombre</label>
+                                <input type="text" id="primerNombre" name="primerNombre" class="form-control" required
+                                    oninput="this.value = this.value.toUpperCase()">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="otrosNombres" class="form-label">Otros Nombres</label>
+                                <input type="text" id="otrosNombres" name="otrosNombres" class="form-control"
+                                    oninput="this.value = this.value.toUpperCase()">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="paisEmpleo" class="form-label">País del Empleo</label>
+                                <select id="paisEmpleo" name="paisEmpleo" class="form-select" required>
+                                    <option value="Colombia">Colombia</option>
+                                    <option value="Estados Unidos">Estados Unidos</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tipoIdentificacion" class="form-label">Tipo de Identificación</label>
+                                <select id="tipoIdentificacion" name="tipoIdentificacion" class="form-select" required>
+                                    <option value="CC">Cédula de Ciudadanía</option>
+                                    <option value="CE">Cédula de Extranjería</option>
+                                    <option value="PP">Pasaporte</option>
+                                    <option value="PE">Permiso Especial</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="numeroIdentificacion" class="form-label">Número de Identificación</label>
+                                <input type="text" id="numeroIdentificacion" name="numeroIdentificacion"
+                                    class="form-control" required oninput="this.value = this.value.toUpperCase()">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="fechaIngreso" class="form-label">Fecha de Ingreso</label>
+                                <input type="date" id="fechaIngreso" name="fechaIngreso" class="form-control"
+                                    max="<?=date('Y-m-d')?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="area" class="form-label">Área</label>
+                                <select id="area" name="area" class="form-select" required>
+                                    <option value="Administración">Administración</option>
+                                    <option value="Financiera">Financiera</option>
+                                    <option value="Compras">Compras</option>
+                                    <option value="Infraestructura">Infraestructura</option>
+                                    <option value="Operación">Operación</option>
+                                    <option value="Talento Humano">Talento Humano</option>
+                                    <option value="Servicios Varios">Servicios Varios</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="estado" class="form-label">Estado</label>
+                            <input type="text" id="estado" name="estado" class="form-control" value="Activo" readonly>
+                        </div>
+                        <input type="hidden" id="fechaRegistro" name="fechaRegistro" value="<?=date('Y-m-d H:i:s')?>">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informacion del Usuario -->
+    <% users.forEach(users=> { %>
+        <div class="modal fade" id="userInfoModal-<%= users._id %>" tabindex="-1" aria-labelledby="userInfoModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userInfoModalLabel">Información del Usuario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="primerApellido" class="form-label">Primer Apellido</label>
+                                <input type="text" class="form-control" value="<%= users.primerApellido %>" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="segundoApellido" class="form-label">Segundo Apellido</label>
+                                <input type="text" class="form-control" value="<%= users.segundoApellido %>" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="primerNombre" class="form-label">Primer Nombre</label>
+                                <input type="text" class="form-control" value="<%= users.primerNombre %>" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="otrosNombres" class="form-label">Otros Nombres</label>
+                                <input type="text" class="form-control" value="<%= users.otrosNombres %>" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="paisEmpleo" class="form-label">País del Empleo</label>
+                                <input type="text" class="form-control" value="<%= users.paisEmpleo %>" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tipoIdentificacion" class="form-label">Tipo de Identificación</label>
+                                <input type="text" class="form-control" value="<%= users.tipoIdentificacion %>" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="numeroIdentificacion" class="form-label">Número de Identificación</label>
+                                <input type="text" class="form-control" value="<%= users.numeroIdentificacion %>"
+                                    readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="correoElectronico" class="form-label">Correo Electrónico</label>
+                                <input type="text" class="form-control" value="<%= users.correoElectronico %>" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="fechaIngreso" class="form-label">Fecha de Ingreso</label>
+                                <input type="text" class="form-control"
+                                    value="<%= users.fechaIngreso.toLocaleDateString() %>" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="area" class="form-label">Área</label>
+                                <input type="text" class="form-control" value="<%= users.area %>" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="estado" class="form-label">Estado</label>
+                                <input type="text" class="form-control" value="<%= users.estado %>" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="fechaHoraRegistro" class="form-label">Fecha de Registro</label>
+                                <input type="text" class="form-control" value="<%= new Date(users.fechaHoraRegistro).toLocaleDateString() %> <%= new Date(users.fechaHoraRegistro).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) %>" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+
+        <!-- Editar Usuario -->
+        <% users.forEach(users=> { %>
+            <div class="modal fade" id="editarModal-<%= users._id %>" tabindex="-1"
+                aria-labelledby="editarModalLabel-<%= users._id %>" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarModalLabel-<%= users._id %>">Editar Empleado</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <form action="/users/<%= users._id %>/edit" method="post" autocomplete="off">
+                            <div class="modal-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="primerApellido" class="form-label">Primer Apellido</label>
+                                        <input type="text" id="primerApellido" name="primerApellido"
+                                            class="form-control" value="<%= users.primerApellido %>" required
+                                            oninput="this.value = this.value.toUpperCase()">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="segundoApellido" class="form-label">Segundo Apellido</label>
+                                        <input type="text" id="segundoApellido" name="segundoApellido"
+                                            class="form-control" value="<%= users.segundoApellido %>"
+                                            oninput="this.value = this.value.toUpperCase()">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="primerNombre" class="form-label">Primer Nombre</label>
+                                        <input type="text" id="primerNombre" name="primerNombre"
+                                            class="form-control" value="<%= users.primerNombre %>" required
+                                            oninput="this.value = this.value.toUpperCase()">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="otrosNombres" class="form-label">Otros Nombres</label>
+                                        <input type="text" id="otrosNombres" name="otrosNombres"
+                                            class="form-control" value="<%= users.otrosNombres %>"
+                                            oninput="this.value = this.value.toUpperCase()">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="paisEmpleo" class="form-label">País del Empleo</label>
+                                        <select id="paisEmpleo" name="paisEmpleo" class="form-select" required>
+                                            <option value="Colombia" <%=users.paisEmpleo==='Colombia' ? 'selected'
+                                                : '' %>>Colombia</option>
+                                            <option value="Estados Unidos" <%=users.paisEmpleo==='Estados Unidos'
+                                                ? 'selected' : '' %>>Estados Unidos</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="tipoIdentificacion" class="form-label">Tipo de
+                                            Identificación</label>
+                                        <select id="tipoIdentificacion" name="tipoIdentificacion"
+                                            class="form-select" required>
+                                            <option value="CC" <%=users.tipoIdentificacion==='CC' ? 'selected' : ''
+                                                %>>Cédula de Ciudadanía</option>
+                                            <option value="CE" <%=users.tipoIdentificacion==='CE' ? 'selected' : ''
+                                                %>>Cédula de Extranjería</option>
+                                            <option value="PP" <%=users.tipoIdentificacion==='PP' ? 'selected' : ''
+                                                %>>Pasaporte</option>
+                                            <option value="PE" <%=users.tipoIdentificacion==='PE' ? 'selected' : ''
+                                                %>>Permiso Especial</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="numeroIdentificacion" class="form-label">Número de
+                                            Identificación</label>
+                                        <input type="text" id="numeroIdentificacion" name="numeroIdentificacion"
+                                            class="form-control" value="<%= users.numeroIdentificacion %>" required
+                                            oninput="this.value = this.value.toUpperCase()">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="area" class="form-label">Área</label>
+                                        <select id="area" name="area" class="form-select" required>
+                                            <option value="Administración" <%=users.area==='Administración'
+                                                ? 'selected' : '' %>>Administración</option>
+                                            <option value="Financiera" <%=users.area==='Financiera' ? 'selected'
+                                                : '' %>>Financiera</option>
+                                            <option value="Compras" <%=users.area==='Compras' ? 'selected' : '' %>
+                                                >Compras</option>
+                                            <option value="Infraestructura" <%=users.area==='Infraestructura'
+                                                ? 'selected' : '' %>>Infraestructura</option>
+                                            <option value="Operación" <%=users.area==='Operación' ? 'selected' : ''
+                                                %>>Operación</option>
+                                            <option value="Talento Humano" <%=users.area==='Talento Humano'
+                                                ? 'selected' : '' %>>Talento Humano</option>
+                                            <option value="Servicios Varios" <%=users.area==='Servicios Varios'
+                                                ? 'selected' : '' %>>Servicios Varios</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="estado" class="form-label">Estado</label>
+                                    <input type="text" id="estado" name="estado" class="form-control"
+                                        value="<%= users.estado %>" readonly>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Actualizar</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+
+            <!-- Eliminar Usuario -->
+            <% users.forEach(users=> { %>
+            <div class="modal fade" id="eliminarUsuarioModal-<%= users._id %>" tabindex="-1"
+                aria-labelledby="eliminarUsuarioModalLabel-<%= users._id %>" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eliminarUsuarioModalLabel-<%= users._id %>">
+                                Confirmar Eliminación
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de que deseas eliminar al usuario <%= users.correo %>?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="/users/<%= users._id %>/delete" method="POST">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+</body>
+<script src="/frontend/statics/validactions.js"></script>
+
+</html>
